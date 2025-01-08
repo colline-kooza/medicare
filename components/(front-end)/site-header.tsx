@@ -1,133 +1,198 @@
-"use client";
-import React from "react";
-import { useState } from "react";
-import { Dialog, DialogPanel } from "@headlessui/react";
-// import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Session } from "next-auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/lib/generateInitials";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Logo from "@/components/global/Logo";
-import AuthenticatedAvatar from "@/components/global/AuthenticatedAvatar";
-import { ModeToggle } from "../mode-toggle";
+"use client"
 
-export default function SiteHeader({ session }: { session: Session | null }) {
-  const navigation = [
-    { name: "Products", href: "/products" },
-    { name: "Categories", href: "/solutions" },
-  
-  ];
-  const router = useRouter();
-  async function handleLogout() {
+import * as React from "react"
+import Link from "next/link"
+import { Search, MapPin, ChevronDown, Tag, Menu } from 'lucide-react'
+import { Session } from "next-auth"
+import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { getInitials } from "@/lib/generateInitials"
+import { ModeToggle } from "@/components/mode-toggle"
+
+interface SiteHeaderProps {
+  session: Session | null
+}
+
+export function SiteHeader({ session }: SiteHeaderProps) {
+  const [isScrolled, setIsScrolled] = React.useState(false)
+  const router = useRouter()
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const handleLogout = async () => {
     try {
-      await signOut();
-      router.push("/login");
+      await signOut()
+      router.push("/login")
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navigation = [
+    { name: "Books", href: "/booking" },
+    { name: "Dashboard", href: "/dashboard" },
+  ]
+
   return (
-    <header className="sticky inset-x-0 top-0 lg:top-0 z-50 backdrop-blur-sm ">
-      <nav
-        aria-label="Global"
-        className="flex items-center justify-between p-6 lg:px-8"
-      >
-        <div className="flex lg:flex-1">
-        <img src="https://img.freepik.com/premium-vector/free-vector-gradient-ecommerce-logo-collection_1077315-9.jpg?ga=GA1.1.123314603.1706863307&semt=ais_hybrid" alt="" className="w-[40px] h-[40px] rounded-lg"/>
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full flex items-center justify-center",
+        isScrolled
+          ? "bg-background/80 backdrop-blur-sm shadow-sm"
+          : "bg-background/60 backdrop-blur-none"
+      )}
+    >
+      <div className="container flex h-16 items-center justify-between space-x-4 sm:space-x-8">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center space-x-2">
+            <img
+              src="/logo-3.png"
+              alt="Logo"
+              className="h-28 w-28 rounded-lg"
+            />
+          </Link>
+          
+          <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4" />
+            <span>New York</span>
+            <ChevronDown className="h-4 w-4" />
+          </div>
         </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          >
-            <span className="sr-only">Open main menu</span>
-            {/* <Bars3Icon aria-hidden="true" className="h-6 w-6" /> */}
-          </button>
+
+        <div className="flex-1 max-w-2xl hidden lg:block">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Lab Tests, Scans & Health Checkup Packages"
+              className="w-full pl-10 bg-muted/50"
+            />
+          </div>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-2">
-          <ModeToggle />
+
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="gap-2">
+                  Healthcare Services
+                  <Badge variant="secondary" className="bg-[#6b21a8]  text-white hover:bg-red-600">
+                    New
+                  </Badge>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {navigation.map((item) => (
+                  <DropdownMenuItem key={item.name} asChild>
+                    <Link href={item.href}>{item.name}</Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Button variant="ghost" className="gap-2 text-[#6b21a8] dark:text-red-500">
+              <Tag className="h-4 w-4" />
+              Offers
+            </Button>
+
+            <ModeToggle />
+          </div>
+
           {session ? (
-            <AuthenticatedAvatar session={session} />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="gap-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={session.user?.image ?? ""}
+                      alt={session.user?.fullName ?? ""}
+                    />
+                    <AvatarFallback>
+                      {getInitials(session.user?.fullName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden md:inline-block">
+                    {session.user?.fullName}
+                  </span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <Button asChild variant={"outline"}>
-              <Link href="/login">Log in</Link>
+            <Button asChild>
+              <Link href="/login">Login</Link>
             </Button>
           )}
-        </div>
-      </nav>
-      <Dialog
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}
-        className="lg:hidden"
-      >
-        <div className="fixed inset-0 z-50" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
-            <Logo href="/" labelShown={true} title="Next Starter Pro" />
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-            >
-              <span className="sr-only">Close menu</span>
-              {/* <XMarkIcon aria-hidden="true" className="h-6 w-6" /> */}
-            </button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-              <div className="py-6">
-                {session ? (
-                  <Button asChild variant={"ghost"}>
-                    <Link href="/dashboard">
-                      <Avatar>
-                        <AvatarImage
-                          src={session?.user?.image ?? ""}
-                          alt={session?.user?.name ?? ""}
-                        />
-                        <AvatarFallback>
-                          {getInitials(session?.user?.name)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="ml-3">Dashboard</span>
+        <ModeToggle />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="text-sm font-medium transition-colors hover:text-primary"
+                    >
+                      {item.name}
                     </Link>
-                  </Button>
-                ) : (
-                  <Button asChild variant={"outline"}>
-                    <Link href="/login">Log in</Link>
-                  </Button>
-                )}
+                  ))}
+                </div>
+                <Button asChild variant="ghost" className="justify-start gap-2">
+                  <Link href="/offers">
+                    <Tag className="h-4 w-4" />
+                    Offers
+                  </Link>
+                </Button>
+                <ModeToggle />
               </div>
-            </div>
-          </div>
-        </DialogPanel>
-      </Dialog>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
     </header>
-  );
+  )
 }

@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
 
 export function AvatarMenuButton({ session }: { session: Session }) {
   const user = session.user;
-  const initials = getInitials(user?.name ?? "");
+  const initials = getInitials(user?.fullName ?? "");
   const router = useRouter();
   async function handleLogout() {
     try {
@@ -85,7 +85,7 @@ export function AvatarMenuButton({ session }: { session: Session }) {
     <Sheet>
       <SheetTrigger asChild>
         <Avatar>
-          <AvatarImage src={user?.image ?? ""} alt={user?.name ?? ""} />
+          <AvatarImage src={user?.image ?? ""} alt={user?.fullName ?? ""} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
       </SheetTrigger>
@@ -93,12 +93,12 @@ export function AvatarMenuButton({ session }: { session: Session }) {
         <SheetHeader>
           <div className="flex items-center space-x-3 pb-3 border-b">
             <Avatar>
-              <AvatarImage src={user?.image ?? ""} alt={user?.name ?? ""} />
+              <AvatarImage src={user?.image ?? ""} alt={user?.fullName ?? ""} />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
             <div className="">
               <h2 className="scroll-m-20 text-xl font-semibold tracking-tight first:mt-0">
-                {user?.name}
+                {user?.fullName}
               </h2>
               <p>{user?.email}</p>
             </div>

@@ -1,18 +1,22 @@
 "use client";
-import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
-import React, { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { LoginProps } from "@/types/types";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react"
-import TextInput from "../FormInputs/TextInput";
-import PasswordInput from "../FormInputs/PasswordInput";
-import SubmitButton from "../FormInputs/SubmitButton";
-
-
-export default function LoginForm() {
+import TextInput from "@/components/FormInputs/TextInput";
+import SubmitButton from "@/components/FormInputs/SubmitButton";
+import CustomCarousel from "../(front-end)/custom-coursel";
+import { createUser } from "@/actions/users";
+import { LoginProps, UserProps } from "@/types/types";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+export type RegisterInputProps = {
+  fullName: string;
+  email: string;
+  password: string;
+  phone: string;
+};
+export default function Register() {
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -24,6 +28,7 @@ export default function LoginForm() {
   const returnUrl = params.get("returnUrl") || "/dashboard";
   const [passErr, setPassErr] = useState("");
   const router = useRouter();
+  
   async function onSubmit(data: LoginProps) {
     try {
       setLoading(true);
@@ -46,7 +51,7 @@ export default function LoginForm() {
         setLoading(false);
         toast.success("Login Successful");
         setPassErr("");
-        router.push(returnUrl);
+        router.push("/booking");
       }
     } catch (error) {
       setLoading(false);
@@ -55,80 +60,48 @@ export default function LoginForm() {
     }
   }
   return (
-    <div className="w-full py-5 lg:px-8 px-6 ">
-      <div className="">
-        <div className="py-4 text-gray-900">
-          <h2 className="text-xl lg:text-2xl font-bold leading-9 tracking-tight  ">
-            Login in to your account
-          </h2>
-          <p className="text-xs">Welcome Back, fill in details to login</p>
-        </div>
+    <div className="w-full lg:grid  h-screen lg:min-h-[600px] lg:grid-cols-2 relative ">
+        <div className="hidden bg-muted lg:block relative">
+        <CustomCarousel />
       </div>
-      <div className="">
-        <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
-          <TextInput
-            register={register}
-            errors={errors}
-            label="Email Address"
-            name="email"
-            icon={Mail}
-            placeholder="email"
-          />
-          <PasswordInput
-            register={register}
-            errors={errors}
-            label="Password"
-            name="password"
-            icon={Lock}
-            placeholder="password"
-            forgotPasswordLink="/forgot-password"
-          />
-          {passErr && <p className="text-red-500 text-xs">{passErr}</p>}
-          <div>
-            <SubmitButton
-              title="Sign In"
-              loadingTitle="Loading Please wait.."
-              loading={loading}
-              className="w-full"
-              loaderIcon={Loader2}
-              showIcon={false}
-            />
+      <div className="flex items-center justify-center py-12 ">
+        <div className="mx-auto grid w-[350px] gap-6 ">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold text-black dark:text-white">Login Account</h1>
           </div>
-        </form>
-        <div className="flex items-center py-4 justify-center space-x-1 text-slate-900">
-          <div className="h-[1px] w-full bg-slate-200"></div>
-          <div className="uppercase">Or</div>
-          <div className="h-[1px] w-full bg-slate-200"></div>
-        </div>
+          <form className="grid gap-4 " onSubmit={handleSubmit(onSubmit)}>
+            <TextInput
+              label="Email Address"
+              register={register}
+              name="email"
+              type="email"
+              errors={errors}
+              placeholder="Eg. johndoe@gmail.com"
+            />
+            <TextInput
+              label="Password"
+              register={register}
+              name="password"
+              type="password"
+              errors={errors}
+              placeholder="******"
+            />
 
-        {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <Button
-            onClick={() => signIn("google")}
-            variant={"outline"}
-            className="w-full"
-          >
-            <FaGoogle className="mr-2 w-6 h-6 text-red-500" />
-            Login with Google
-          </Button>
-          <Button
-            onClick={() => signIn("github")}
-            variant={"outline"}
-            className="w-full"
-          >
-            <FaGithub className="mr-2 w-6 h-6 text-slate-900 dark:text-white" />
-            Login with Github
-          </Button>
-        </div> */}
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Not a Registered ?{" "}
-          <Link
-            href="/register"
-            className="font-semibold leading-6 text-[#044d51] hover:text-[#044d51]"
-          >
-            Create Account
-          </Link>
-        </p>
+            <SubmitButton
+              title="Login"
+              loading={loading}
+              loadingTitle="Login Account please wait..."
+            />
+          </form>
+          <div className="mt-4 text-center text-sm">
+           I dont have an account?{" "}
+            <Link href="/register" className="underline">
+            Register
+            </Link>
+          </div>
+        </div>
       </div>
+    
     </div>
   );
 }

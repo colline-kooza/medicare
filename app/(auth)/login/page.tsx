@@ -8,17 +8,12 @@ import React from "react";
 
 export default async function page() {
   const session = await getServerSession(authOptions);
-  if (session) {
-    redirect("/dashboard");
-  }
+  // if (session) {
+  //   redirect("/book");
+  // }
   return (
-    <section className="mx-auto lg:w-[80%] w-full">
-      <div className="md:container px-4 md:px-0">
-        <div className="border-gray-200 dark:border-gray-700 max-w-md mx-auto border my-3 shadow rounded-md mb-8">
-          <LoginForm />
-        </div>
-        
-      </div>
+    <section>
+       <LoginForm />
     </section>
   );
 }

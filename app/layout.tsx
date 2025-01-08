@@ -4,9 +4,11 @@ import "./globals.css";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { extractRouterConfig } from "uploadthing/server";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 import Providers from "@/components/Providers";
+import { Toaster } from "@/components/ui/sonner"
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,8 +24,8 @@ export default function RootLayout({
   return (
     <html lang="en">
        <body className={inter.className}>
-      
-          <NextSSRPlugin
+      <ReactQueryProvider>
+      <NextSSRPlugin
             /**
              * The `extractRouterConfig` will extract **only** the route configs
              * from the router to prevent additional information from being
@@ -40,12 +42,14 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Providers>
-              <Toaster position="top-center" reverseOrder={false} />
-              <div className="bg-[#f3f6f5]">
+              <Toaster/>
+              <div className="text-black dark:text-white bg-white dark:bg-black">
                 {children}
               </div>
             </Providers>
           </ThemeProvider>
+      </ReactQueryProvider>
+        
       </body>
     </html>
   );

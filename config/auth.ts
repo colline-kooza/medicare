@@ -96,9 +96,7 @@ export const authOptions: NextAuthOptions = {
           console.log("Pass 3 Checked");
           const user = {
             id: existingUser.id,
-            name: existingUser.name,
-            firstName: existingUser.firstName,
-            lastName: existingUser.lastName,
+            name: existingUser.fullName,
             phone: existingUser.phone,
             image: existingUser.image,
             email: existingUser.email,
@@ -127,13 +125,13 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    session({ session, token }) {
+    session({ session, token }:any) {
       console.log("Session callback", { session, token });
       if (session.user && token) {
-        // session.user.id = token.id;
-        session.user.name = token.name;
+        session.user.id = token.id;
+        session.user.fullName = token.fullName;
         session.user.email = token.email;
-        session.user.image = token.picture
+        session.user.image = token.image;
       }
       return session;
     },

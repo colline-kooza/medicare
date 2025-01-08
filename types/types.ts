@@ -6,8 +6,7 @@ export type CategoryProps = {
 };
 export type UserProps = {
   name: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   phone: string;
   image: string;
   email: string;
@@ -18,6 +17,14 @@ export type LoginProps = {
   password: string;
 };
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface FaqProps {
+  items: FaqItem[];
+}
 
 export interface ProductProps {
   title: string;

@@ -4,10 +4,10 @@ import { UserProps } from "@/types/types";
 import bcrypt from "bcrypt";
 
 export async function createUser(data: UserProps) {
-  const { email, password, firstName, lastName, name, phone, image } = data;
+  const { email, password, fullName,  phone, image } = data;
   try {
     // Hash the PAASWORD
-    console.log(email, password, firstName, lastName, name, phone, image )
+    // console.log(email, password, fullName, phone, image )
     const hashedPassword = await bcrypt.hash(password, 10);
     const existingUser = await db.user.findUnique({
       where: {
@@ -25,9 +25,7 @@ export async function createUser(data: UserProps) {
       data: {
         email,
         password: hashedPassword,
-        firstName,
-        lastName,
-        name,
+        fullName,
         phone,
         image,
       },

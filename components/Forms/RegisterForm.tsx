@@ -1,21 +1,21 @@
 "use client";
-import { Eye, EyeOff, Headset, Loader2, Lock, Mail, User } from "lucide-react";
-import React, { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { UserProps } from "@/types/types";
-
-import toast from "react-hot-toast";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { createUser } from "@/actions/users";
-import TextInput from "../FormInputs/TextInput";
-import PasswordInput from "../FormInputs/PasswordInput";
-import SubmitButton from "../FormInputs/SubmitButton";
-import { Button } from "../ui/button";
-import { FaGithub, FaGitter, FaGoogle } from "react-icons/fa";
+import TextInput from "@/components/FormInputs/TextInput";
+import SubmitButton from "@/components/FormInputs/SubmitButton";
+import CustomCarousel from "../(front-end)/custom-coursel";
 import { createUser } from "@/actions/users";
-import { signIn } from "next-auth/react";
-export default function RegisterForm() {
+import { UserProps } from "@/types/types";
+import { toast } from "sonner";
+export type RegisterInputProps = {
+  fullName: string;
+  email: string;
+  password: string;
+  phone: string;
+};
+export default function Register() {
   const [loading, setLoading] = useState(false);
   const [emailErr, setEmailErr] = useState<string | null>(null);
   const {
@@ -26,13 +26,13 @@ export default function RegisterForm() {
   } = useForm<UserProps>();
   const router = useRouter();
   async function onSubmit(data: UserProps) {
-    if (!data.firstName || !data.lastName || !data.email || !data.password) {
+    if (!data.fullName || !data.email || !data.password || !data.phone) {
       toast.error("Please fill in all required fields.");
       return;
     }
   
     setLoading(true);
-    data.name = `${data.firstName} ${data.lastName}`;
+    data.name = `${data.fullName}`;
     data.image = "https://utfs.io/f/59b606d1-9148-4f50-ae1c-e9d02322e834-2558r.png";
    console.log(data)
     try {
@@ -56,115 +56,61 @@ export default function RegisterForm() {
   }
   
   return (
-    <div className="w-full py-5 lg:px-8 px-6">
-      <div className="">
-        <div className="py-4 text-gray-900">
-          <h2 className="text-xl lg:text-2xl font-bold leading-9 tracking-tight  ">
-            Create an account
-          </h2>
-          <p className="text-xs">Join Us, fill in details to login</p>
-        </div>
-      </div>
-      <div className="">
-        <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <TextInput
-              register={register}
-              errors={errors}
-              label="First Name"
-              name="firstName"
-              icon={User}
-              placeholder="first Name"
-            />
-            <TextInput
-              register={register}
-              errors={errors}
-              label="Last Name"
-              name="lastName"
-              icon={User}
-              placeholder="last Name"
-            />
+    <div className="w-full lg:grid h-screen lg:min-h-[600px] lg:grid-cols-2 relative ">
+      <div className="flex items-center justify-center py-12 ">
+        <div className="mx-auto grid w-[350px] gap-6 ">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl font-bold text-black dark:text-white">Create an Account</h1>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form className="grid gap-4 " onSubmit={handleSubmit(onSubmit)}>
             <TextInput
+              label="Full Name"
               register={register}
+              name="fullName"
               errors={errors}
-              label="Phone"
+              placeholder="eg John Doe"
+            />
+            <TextInput
+              label="Email Address"
+              register={register}
+              name="email"
+              type="email"
+              errors={errors}
+              placeholder="Eg. johndoe@gmail.com"
+            />
+            <TextInput
+              label="Phone Number"
+              register={register}
               name="phone"
-              icon={Headset}
-              placeholder="phone"
+              type="tel"
+              errors={errors}
+              placeholder=""
             />
-            <div className="">
-              <TextInput
-                type="email"
-                register={register}
-                errors={errors}
-                label="Email Address"
-                name="email"
-                icon={Mail}
-                placeholder="email"
-              />
-              {emailErr && (
-                <p className="text-red-500 text-xs mt-2">{emailErr}</p>
-              )}
-            </div>
-          </div>
+            <TextInput
+              label="Password"
+              register={register}
+              name="password"
+              type="password"
+              errors={errors}
+              placeholder="******"
+            />
 
-          <PasswordInput
-            register={register}
-            errors={errors}
-            label="Password"
-            name="password"
-            icon={Lock}
-            placeholder="password"
-            type="password"
-          />
-          <div>
             <SubmitButton
               title="Sign Up"
-              loadingTitle="Creating Please wait.."
               loading={loading}
-              className="w-full"
-              loaderIcon={Loader2}
-              showIcon={false}
+              loadingTitle="Creating Account please wait..."
             />
+          </form>
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Login
+            </Link>
           </div>
-        </form>
-
-        {/* <div className="flex items-center py-4 justify-center space-x-1 text-slate-900">
-          <div className="h-[1px] w-full bg-slate-200"></div>
-          <div className="uppercase">Or</div>
-          <div className="h-[1px] w-full bg-slate-200"></div>
-        </div> */}
-
-        {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <Button
-            onClick={() => signIn("google")}
-            variant={"outline"}
-            className="w-full"
-          >
-            <FaGoogle className="mr-2 w-6 h-6 text-red-500" />
-            Signup with Google
-          </Button>
-          <Button
-            onClick={() => signIn("github")}
-            variant={"outline"}
-            className="w-full"
-          >
-            <FaGithub className="mr-2 w-6 h-6 text-slate-900 dark:text-white" />
-            Signup with Github
-          </Button>
-        </div> */}
-
-        <p className="mt-6 text-left text-sm text-gray-500">
-          Alrealy Registered ?{" "}
-          <Link
-            href="/login"
-            className="font-semibold leading-6 text-[#044d51] hover:text-[#044d51]"
-          >
-            Login
-          </Link>
-        </p>
+        </div>
+      </div>
+      <div className="hidden bg-muted lg:block relative">
+        <CustomCarousel />
       </div>
     </div>
   );

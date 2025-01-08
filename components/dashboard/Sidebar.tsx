@@ -35,26 +35,26 @@ export default function Sidebar() {
       icon: Home,
     },
     {
-      title: "Orders",
-      href: "/dashboard/orders",
+      title: "Bookings",
+      href: "/dashboard/bookings",
       icon: ShoppingCart,
       count: 6,
     },
-    {
-      title: "Products",
-      href: "/dashboard/products",
-      icon: Package,
-    },
+    // {
+    //   title: "Products",
+    //   href: "/dashboard/products",
+    //   icon: Package,
+    // },
     {
       title: "Customers",
       href: "/dashboard/customers",
       icon: Users,
     },
-    {
-      title: "Categories",
-      href: "/dashboard/categories",
-      icon: LayoutGrid,
-    },
+    // {
+    //   title: "Categories",
+    //   href: "/dashboard/categories",
+    //   icon: LayoutGrid,
+    // },
     // {
     //   title: "Analytics",
     //   href: "/dashboard/analytics",

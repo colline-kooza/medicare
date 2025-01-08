@@ -26,12 +26,12 @@ export default function AuthenticatedAvatar({
             src={"https://media.istockphoto.com/id/2151669184/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=UEa7oHoOL30ynvmJzSCIPrwwopJdfqzBs0q69ezQoM8="}
             alt={""}
           />
-          <AvatarFallback>{getInitials(session?.user?.name)}</AvatarFallback>
+          <AvatarFallback>{getInitials(session?.user?.fullName)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>
-          <p>{session?.user?.name}</p>
+          <p>{session?.user?.fullName}</p>
           <p className=" text-xs text-muted-foreground">
             {session?.user?.email}
           </p>
