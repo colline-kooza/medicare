@@ -161,7 +161,7 @@ export default function Page() {
         </div>
       </div>
       <FeaturedSection/>
-      <TestCategories/>
+      {/* <TestCategories/> */}
       <FindTests/>
       <Patients/>
       <LabTests/>

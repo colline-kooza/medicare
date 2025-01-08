@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Dashboard() {
   return (
@@ -19,10 +20,10 @@ export default function Dashboard() {
           </p>
           <div className="flex items-center gap-3">
           <Button asChild className="mt-4">
-            <a href="/booking">Add Bookings</a>
+            <Link href="/booking">Add Bookings</Link>
           </Button>
           <Button asChild className="mt-4">
-            <a href="/dashboard/booking">View Bookings</a>
+            <Link href="/dashboard/bookings">View Bookings</Link>
           </Button>
           </div>
         </div>
