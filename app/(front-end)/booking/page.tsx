@@ -9,9 +9,11 @@ export default async function page() {
     if (!session) {
       redirect("/login");
     }
+    const userId=session.user.id
+    const email=session.user.id
   return (
     <div>
-    <BookingPage/>
+    <BookingPage userId={userId} email={email}/>
     </div>
   )
 }

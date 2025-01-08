@@ -90,7 +90,7 @@ const labTests = [
   }
 ]
 
-export default function BookingPage() {
+export default function BookingPage({userId , email}:{userId:string , email:string}) {
   const [date, setDate] = useState<Date>()
   const [selectedTime, setSelectedTime] = useState<string>()
   const [selectedCategory, setSelectedCategory] = useState('All tests')
@@ -126,6 +126,8 @@ export default function BookingPage() {
     try {
       await createBooking.mutateAsync({
         date: bookingDate,
+        userId,
+        email,
         tests: tests.map(test => ({
           testId: test.id,
           price: test.price
