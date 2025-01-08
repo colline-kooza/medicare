@@ -160,8 +160,8 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <TestCategories/>
       <FeaturedSection/>
+      <TestCategories/>
       <FindTests/>
       <Patients/>
       <LabTests/>

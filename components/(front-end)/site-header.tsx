@@ -121,7 +121,9 @@ export function SiteHeader({ session }: SiteHeaderProps) {
               Offers
             </Button>
 
-            <ModeToggle />
+           <div className="block lg:hidden">
+           <ModeToggle />
+           </div>
           </div>
 
           {session ? (
