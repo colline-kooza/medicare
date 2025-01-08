@@ -2,6 +2,7 @@ import { ArrowRight, FlaskRoundIcon as Flask, TestTube } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
+import Link from 'next/link'
 
 interface ServiceCardProps {
   title: string
@@ -33,10 +34,13 @@ function ServiceCard({
           {title}
         </h3>
         <div className="mt-auto">
+          <Link href="/booking">
           <Button variant="secondary" className="group">
             {buttonText}
             <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
           </Button>
+          </Link>
+      
         </div>
       </div>
       <div className="absolute right-0 bottom-0 w-48 h-48 md:w-64 md:h-64">

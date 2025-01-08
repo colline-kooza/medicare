@@ -13,6 +13,7 @@ import WhyChooseUs from '@/components/(front-end)/why-choose-us'
 import Samples from '@/components/(front-end)/samples'
 import Faq from '@/components/(front-end)/Faq'
 import { FaqItem } from '@/types/types'
+import Link from 'next/link'
 
 const carouselData = [
   {
@@ -101,16 +102,21 @@ export default function Page() {
 
             <div className="flex flex-col space-y-6">
               <div className='flex items-center'>
-                <button className="group flex w-fit items-center gap-2 rounded-full bg-[#6b21a8] px-6 py-3 text-white transition-all hover:bg-gray-800">
+              <Link href="/booking">
+              <button className="group flex w-fit items-center gap-2 rounded-full bg-[#6b21a8] px-6 py-3 text-white transition-all hover:bg-gray-800">
                   Book now
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
-                <button 
+              </Link>
+              <Link href="/booking">
+              <button 
                   className="group flex justify-center items-center rounded-full bg-[#6b21a8] w-10 h-10 text-white transition-all hover:bg-gray-800"
                   onClick={() => setCurrentSlide((prev) => (prev + 1) % carouselData.length)}
                 >
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
+              </Link>
+                
               </div>
 
               <div className="flex gap-2">
